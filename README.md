@@ -4,9 +4,9 @@
 #  Quiz App (일반상식)
 
 
-[DEMO](https://modest-kalam-b87884.netlify.app)
+[DEMO](http://quiz1.jacobko.info/)
 
-![screen](https://user-images.githubusercontent.com/28912774/117662433-822e6e80-b1da-11eb-893c-78ec7d06f624.gif)
+![quiz](https://user-images.githubusercontent.com/28912774/119346330-0a316f80-bcd5-11eb-8a63-38a7f70b2ca7.gif)
 
 
 
