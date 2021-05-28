@@ -180,7 +180,7 @@ function showMealInfo(mealData) {
 
   mealEl.innerHTML = `
     <h1>${mealData.strMeal}</h1>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/${selectURL}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe class="video-wrap" width="100%" height="315" src="https://www.youtube.com/embed/${selectURL}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <h3>Ingredients: </h3>
     <ul>
     ${ingredients.map(ing => `<li>${ing}</li>`).join('')}
