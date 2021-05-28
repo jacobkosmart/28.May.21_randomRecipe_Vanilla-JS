@@ -5,35 +5,37 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz App</title>
+  <title>Random Recipe App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="style.css" />
   <script defer src="script.js"></script>
 </head>
 
 <body>
-  <div class="quiz-container" id="quiz">
-    <div class="quiz-header">
-      <h2 id="question">Question text</h2>
-      <ul>
-        <li>
-          <input type="radio" name="answer" class="answer" id="a">
-          <label id="a_text" for="a">Question</label>
-        </li>
-        <li>
-          <input type="radio" name="answer" class="answer" id="b">
-          <label id="b_text" for="b">Question</label>
-        </li>
-        <li>
-          <input type="radio" name="answer" class="answer" id="c">
-          <label id="c_text" for="c">Question</label>
-        </li>
-        <li>
-          <input type="radio" name="answer" class="answer" id="d">
-          <label id="d_text" for="d">Question</label>
-        </li>
+  <div class="mobile-container">
+    <header>
+      <input type="text" id="search-term" />
+      <button id="search"><i class="fas fa-search"></i></button>
+    </header>
+    <div class="fav-container">
+      <h3>Favorite Meals</h3>
+      <ul class="fav-meals" id="fav-meals">
       </ul>
     </div>
-    <button id="submit">다음</button>
+    <div class="meals" id="meals">
+    </div>
+    <div class="next">
+      <button onClick="window.location.reload()" class="nextBtn">Next</a>
+    </div>
+  </div>
+
+  <div class="popup-container hidden" id="meal-popup">
+    <div id="popup" class="popup">
+      <button id="close-popup" class="close-popup"><i class="fas fa-times"></i></button>
+
+      <div id="meal-info" class="meal-info">
+      </div>
+    </div>
   </div>
 </body>
 

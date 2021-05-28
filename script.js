@@ -1,114 +1,221 @@
-// quiz question array
-const quizData = [{
-  question: '1.의학적으로 얼굴과 머리를 구분하는 기준은 어디일까요?',
-  a: '코',
-  b: '눈썹',
-  c: '귀',
-  d: '머리카락',
-  correct: 'b'
-}, {
-  question: '2.다음 중 바다가 아닌 곳은?',
-  a: '카리브해',
-  b: '오호츠크해',
-  c: '사해',
-  d: '지중해',
-  correct: 'c'
-}, {
-  question: '3.심청이의 아버지 심봉사의 이름은?',
-  a: '심전도',
-  b: '심학규',
-  c: '심한길',
-  d: '심은하',
-  correct: 'b'
-}, {
-  question: '4.택시 번호판의 바탕색은?',
-  a: '녹색',
-  b: '흰색',
-  c: '노란색',
-  d: '파란색',
-  correct: 'c'
-}, {
-  question: '5.선인장의 가시는 무엇이 변해서 가시가 되었을까요?',
-  a: '줄기',
-  b: '가지',
-  c: '잎',
-  d: '꽃',
-  correct: 'c'
-}];
+const mealsEl = document.getElementById("meals");
+const favoriteContainer = document.getElementById('fav-meals');
+const serchTerm = document.getElementById('search-term');
+const searchBtn = document.getElementById('search');
+const mealInfoEl = document.getElementById('meal-info')
+const mealPopup = document.getElementById('meal-popup');
+const popupCloseBtn = document.getElementById('close-popup');
 
-// HTML DOM getElementById
-const answersEls = document.querySelectorAll('.answer');
-const quiz = document.getElementById('quiz')
-const questionEl = document.getElementById('question');
-const a_text = document.getElementById('a_text');
-const b_text = document.getElementById('b_text');
-const c_text = document.getElementById('c_text');
-const d_text = document.getElementById('d_text');
-const submitBtn = document.getElementById('submit');
+
+getRandomMeal();
+fetchFavMeals();
 
 
 
-// set index 0 
-let currentQuiz = 0;
-let score = 0;
+async function getRandomMeal() {
+  const resp = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
+  const respData = await resp.json();
+  const randomMeal = respData.meals[0];
 
+  console.log(randomMeal)
 
-function loadQuiz() {
-
-  deselectAnswers();
-
-  const currentQuizData = quizData[currentQuiz]; // set currentQuizData
-
-  // put into HTML from quizData
-  questionEl.innerText = currentQuizData.question;
-  a_text.innerText = currentQuizData.a;
-  b_text.innerText = currentQuizData.b;
-  c_text.innerText = currentQuizData.c;
-  d_text.innerText = currentQuizData.d;
+  addMeal(randomMeal, true);
 }
 
-// execute loadQuiz
-loadQuiz();
+async function getMealById(id) {
+  const resp = await fetch("https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + id);
 
-function getSelected() {
+  const respData = await resp.json();
 
-  let answer = undefined;
+  const meal = respData.meals[0];
 
-  answersEls.forEach((answerEl) => {
-    if (answerEl.checked) {
-      answer = answerEl.id;
+  return meal
+}
+
+async function getMealBySearch(term) {
+  const resp = await fetch("https://www.themealdb.com/api/json/v1/1/search.php?s=" + term);
+
+  const respData = await resp.json();
+  const meals = respData.meals;
+
+  return meals;
+}
+
+
+function addMeal(mealData, random = false) {
+
+  const meal = document.createElement("div");
+  meal.classList.add("meal");
+
+  meal.innerHTML = `
+    <div class="meal-header">
+      ${random ? `
+      <span class="random"> Random Recipe </span>` : ""}
+      <img src="${mealData.strMealThumb}" alt="${mealData.strMeal}" />
+    </div>
+    <div class="meal-body">
+      <h4>${mealData.strMeal}</h4>
+      <button class="fav-button" ><i class="fas fa-thumbs-up"></i></button>
+    </div>
+    <div class="meal-foot">
+      
+    </div>
+    `;
+    
+  const btn = meal.querySelector(".meal-body .fav-button");
+
+
+  btn.addEventListener("click", () => { // click event
+    if(btn.classList.contains('active')) { // check active class
+      removeMealLS(mealData.idMeal) //  if unclick remove idMeal
+      btn.classList.remove("active") // remove active
+    } 
+    else { // if active class already in there
+      addMealLS(mealData.idMeal)  // add idMeal from mealData
+      btn.classList.add("active") // then add active class
     }
+
+
+    fetchFavMeals();
+
+
   });
 
-  return answer;
+  meal.addEventListener('click', () => {
+    showMealInfo(mealData);
+  });
+
+  mealsEl.appendChild(meal); 
+}
+
+function addMealLS(mealId) {
+  const mealIds = getMealsLS();
+
+  localStorage.setItem('mealIds', JSON.stringify([...mealIds, mealId]));
+}
+
+function removeMealLS(mealId) {
+  const mealIds = getMealsLS();
+  
+  localStorage.setItem('mealIds', JSON.stringify(mealIds.filter(id => id !== mealId)));
 
 }
 
-function deselectAnswers() {
-  answersEls.forEach((answerEl) => {
-    answerEl.checked = false;
-  })
+function getMealsLS() {
+  const mealIds = JSON.parse(localStorage.getItem('mealIds'));
+
+  return mealIds === null ? [] : mealIds; // mealIDs 가 null 이면 [] otherwise mealIds
 }
 
 
-// add click btn to change next question
-submitBtn.addEventListener('click', () => {
-  // check to see the answer
-  const answer = getSelected();
+async function fetchFavMeals() {
 
-  if (answer) {
-    if (answer === quizData[currentQuiz].correct) {
-      score++;
-    }
-    // after clicking, next index in quizData
-    currentQuiz++;
-    if (currentQuiz < quizData.length) loadQuiz();
-    else {
-      quiz.innerHTML = `
-      <h2>당신의 점수는.. ${score}/${quizData.length} 입니다.</h2>
+  // clean the container
+  favoriteContainer.innerHTML = "";
 
-      <button onclick = "location.reload()">다시 한번더!!</button>
-      `
+  const mealIds = getMealsLS();
+
+  const meals = [];
+
+  for(let i=0; i<mealIds.length; i++) {
+    const mealId = mealIds[i];
+    meal = await getMealById(mealId);
+
+    addMealFav(meal);
+  }
+}
+
+
+
+function addMealFav(mealData) {
+
+  const favMeal = document.createElement("li");
+
+  favMeal.innerHTML = `
+    <img src="${mealData.strMealThumb}" alt="${mealData.strMeal}">
+    <span>${mealData.strMeal}</span>
+    <button class= "clear"><i class="fas fa-window-close"></i></button>
+  `;
+
+  const btn = favMeal.querySelector('.clear');
+
+  btn.addEventListener('click', () => {
+    removeMealLS(mealData.idMeal);
+
+    fetchFavMeals();
+  });
+
+  favMeal.addEventListener('click', () => {
+    showMealInfo(mealData);
+  });
+
+
+  favoriteContainer.appendChild(favMeal); 
+}
+
+function showMealInfo(mealData) {
+  // clean it up
+
+  mealInfoEl.innerHTML = '';
+
+  // update the Meal info
+  const mealEl = document.createElement('div');
+
+  const ingredients = [];
+
+  // get ingredients and measures
+  for(let i=1; i<=20; i++) {
+    if(mealData['strIngredient' + i]) {
+      ingredients.push(`${mealData['strIngredient' + i]} - ${mealData['strMeasure' + i]}`)
+    } else {
+      break;
     }
   }
+
+  const youtubeEl = mealData.strYoutube
+  const selectURL = youtubeEl.match(/(?<=\=).{1,}/g)
+
+  
+
+
+  mealEl.innerHTML = `
+    <h1>${mealData.strMeal}</h1>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/${selectURL}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <h3>Ingredients: </h3>
+    <ul>
+    ${ingredients.map(ing => `<li>${ing}</li>`).join('')}
+    </ul>
+    <p>${mealData.strInstructions}</p>
+    <img src="${mealData.strMealThumb}" alt="">
+  `
+
+
+
+  mealInfoEl.appendChild(mealEl);
+
+  // show the popup
+  mealPopup.classList.remove('hidden')
+}
+
+
+searchBtn.addEventListener('click', async () => {
+  // clean container
+  mealsEl.innerHTML = "";
+
+  const search = serchTerm.value;
+  const meals = await getMealBySearch(search);
+
+  if (meals) {
+    meals.forEach((meal) => {
+      addMeal(meal);
+    });
+  }
+});
+
+
+
+popupCloseBtn.addEventListener('click', () => {
+  mealPopup.classList.add('hidden');
 })
+
+
