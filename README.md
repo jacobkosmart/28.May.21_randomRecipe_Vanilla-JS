@@ -2,10 +2,10 @@
 #  🍚 Recipe App 
 
 
-[ Demo](http://quiz1.jacobko.info/)
+[Demo](http://recipe.jacobko.info/)
 
-![quiz](https://user-images.githubusercontent.com/28912774/119346330-0a316f80-bcd5-11eb-8a63-38a7f70b2ca7.gif)
 
+<img src = "https://user-images.githubusercontent.com/28912774/119988494-239e2880-c001-11eb-8607-0722c2ceca86.gif" width ="200" /> <img src = "https://user-images.githubusercontent.com/28912774/119988501-24cf5580-c001-11eb-85ef-80084b7df5a2.gif" width ="200" />
 
 
 ## 💻 1.프로젝트 소개  
