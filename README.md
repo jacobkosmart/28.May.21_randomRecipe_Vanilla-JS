@@ -168,10 +168,6 @@ function showMealInfo(mealData) {
     - 다음 random 이미지 return 시 runtime이 생각보다 오래 걸려서 코드 최적화를 통한 구동 속도 향상 필요
 
 
-
-- font awsome 사용 <i class="fa fa-heart"></i> 관련 내용 링크 추가
-
-
 ## Reference
 
 - [Florin Pop](https://www.youtube.com/watch?v=dtKciwk_si4&t=4697s)
