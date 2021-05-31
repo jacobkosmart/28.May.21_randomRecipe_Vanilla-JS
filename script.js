@@ -1,3 +1,5 @@
+
+// link HTML DOM
 const mealsEl = document.getElementById("meals");
 const favoriteContainer = document.getElementById('fav-meals');
 const serchTerm = document.getElementById('search-term');
@@ -6,11 +8,15 @@ const mealInfoEl = document.getElementById('meal-info')
 const mealPopup = document.getElementById('meal-popup');
 const popupCloseBtn = document.getElementById('close-popup');
 
+// -----------------------------
 
+
+// excecute main function
 getRandomMeal();
 fetchFavMeals();
 
 
+// link in the meal DB
 
 async function getRandomMeal() {
   const resp = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
@@ -40,6 +46,8 @@ async function getMealBySearch(term) {
 
   return meals;
 }
+
+// ------
 
 
 function addMeal(mealData, random = false) {
@@ -172,6 +180,7 @@ function showMealInfo(mealData) {
     }
   }
 
+  // JS regular expressions (get ID)
   const youtubeEl = mealData.strYoutube
   const selectURL = youtubeEl.match(/(?<=\=).{1,}/g)
 
